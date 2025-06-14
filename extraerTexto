@@ -1,154 +1,88 @@
 import spacy
 from pdf2image import convert_from_path
 from pytesseract import image_to_string
-import pytesseract
 from PIL import Image
 import os
 import json
-import PyPDF2 # Importamos PyPDF2 para la metadata del PDF
+import PyPDF2
+import pytesseract
+import uuid
 
-# --- 0. Configuración inicial de spaCy ---
-# Asegúrate de haber descargado el modelo antes: python -m spacy download es_core_news_sm
+# Configuración de Tesseract y Poppler
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+poppler_path = r'C:\Users\ruzul\Downloads\Release-24.08.0-0\poppler-24.08.0\Library\bin'
+
+# Carga modelo spaCy
 try:
-    # Carga el modelo de español. Si tienes problemas de memoria, puedes usar 'es_core_news_sm'
-    # o incluso deshabilitar componentes no estrictamente necesarios al cargar el modelo.
-    # Por ejemplo: nlp = spacy.load("es_core_news_sm", disable=["parser", "textcat"])
-    nlp = spacy.load("es_core_news_sm") 
-    print("Modelo de spaCy 'es_core_news_sm' cargado exitosamente.")
+    nlp = spacy.load("es_core_news_sm")
+    print("Modelo spaCy cargado.")
 except OSError:
-    print("El modelo de spaCy 'es_core_news_sm' no se encontró. Por favor, ejecute:")
-    print("python -m spacy download es_core_news_sm")
-    exit() # Salir si el modelo no está disponible
+    print("Ejecuta: python -m spacy download es_core_news_sm")
+    exit()
 
-# --- Definición de la función de procesamiento con spaCy ---
 def process_text_with_spacy(text):
-    """
-    Procesa el texto con spaCy para tokenización, lematización,
-    eliminación de stopwords, POS tagging y NER.
-    """
-    if not isinstance(text, str):
-        return {
-            "tokens": [],
-            "lemmas": [],
-            "pos_tags": [],
-            "entities": [],
-            "cleaned_text": ""
-        }
+    if not isinstance(text, str): return ""
+    doc = nlp(text.lower())
+    return " ".join([
+        token.lemma_ for token in doc
+        if not token.is_stop and not token.is_punct and not token.is_space and not token.like_num
+    ])
 
-    doc = nlp(text.lower()) # Procesar el texto en minúsculas
+# Ruta al directorio de PDFs
+pdf_folder = './LIBROS'
+pdf_files = [os.path.join(pdf_folder, f) for f in os.listdir(pdf_folder) if f.lower().endswith('.pdf')]
 
-    tokens = []
-    lemmas = []
-    pos_tags = []
-    
-    # Tokenización, Lemmatización, Eliminación de Stopwords, POS Tagging
-    cleaned_tokens = []
-    for token in doc:
-        tokens.append(token.text)
-        lemmas.append(token.lemma_)
-        pos_tags.append({"text": token.text, "pos": token.pos_})
+# Lista para la estructura plana final
+flattened_data = []
 
-        # Para el texto limpio, filtra stopwords, puntuación y espacios, y usa el lema
-        if not token.is_stop and not token.is_punct and not token.is_space and not token.like_num:
-            cleaned_tokens.append(token.lemma_)
-    
-    # Reconocimiento de Entidades Nombradas (NER)
-    entities = [{"text": ent.text, "label": ent.label_} for ent in doc.ents]
+for pdf_path in pdf_files:
+    if not os.path.exists(pdf_path):
+        print(f"Archivo no encontrado: {pdf_path}")
+        continue
 
-    return {
-        "tokens": tokens,
-        "lemmas": lemmas,
-        "pos_tags": pos_tags,
-        "entities": entities,
-        "cleaned_text": " ".join(cleaned_tokens)
-    }
+    try:
+        with open(pdf_path, 'rb') as file:
+            reader = PyPDF2.PdfReader(file)
+            metadata = reader.metadata or {}
+            total_pages = len(reader.pages)
+    except Exception as e:
+        print(f"Error leyendo PDF: {e}")
+        metadata = {}
+        total_pages = 0
 
-# --- Configura la ruta de Tesseract y Poppler ---
-pytesseract.pytesseract.tesseract_cmd = r'D:/Tesseract/tesseract.exe'
-poppler_path = r'D:/Downloads/Release-24.08.0-0/poppler-24.08.0/Library/bin'
+    print(f"Procesando PDF: {os.path.basename(pdf_path)} con {total_pages} páginas.")
+    pages = convert_from_path(pdf_path, dpi=300, poppler_path=poppler_path)
 
-# Ruta al PDF de entrada
-pdf_path = 'MapadeProcesos.pdf'
+    for i, page in enumerate(pages):
+        page_number = i + 1
+        image_path = f"temp_page_{uuid.uuid4().hex}.png"
+        page.save(image_path, 'PNG')
 
-# --- 1. Extraer Metadata del PDF ---
-pdf_metadata = {}
-try:
-    with open(pdf_path, 'rb') as file:
-        reader = PyPDF2.PdfReader(file)
-        # Información del documento
-        info = reader.metadata
-        if info:
-            for key, value in info.items():
-                pdf_metadata[key] = str(value) # Convertir a string para JSON
-        
-        # Número total de páginas
-        pdf_metadata['total_pages'] = len(reader.pages)
-        print(f"Metadata del PDF extraída: {pdf_metadata}")
-except Exception as e:
-    print(f"No se pudo extraer la metadata del PDF: {e}")
-    pdf_metadata['total_pages'] = 0 # Asignar 0 si no se pudo obtener
+        extracted_text = image_to_string(Image.open(image_path), lang='spa')
+        os.remove(image_path)
 
-# Convertir PDF a imágenes (una por página)
-print(f"Convirtiendo '{pdf_path}' a imágenes...")
-pages = convert_from_path(pdf_path, dpi=300, poppler_path=poppler_path)
+        # Dividir en párrafos por doble salto de línea
+        parrafos = [p.strip() for p in extracted_text.split('\n\n') if p.strip()]
+        print(f"Página {page_number} tiene {len(parrafos)} párrafos.")
 
-# Verificamos si el total de páginas obtenido por PyPDF2 coincide con pdf2image
-# En caso de no haber podido obtener total_pages con PyPDF2, lo tomamos de pdf2image
-if pdf_metadata['total_pages'] == 0:
-    pdf_metadata['total_pages'] = len(pages)
+        for j, parrafo in enumerate(parrafos):
+            cleaned_text = process_text_with_spacy(parrafo)
+            if not cleaned_text.strip():
+                continue
 
-print(f"PDF convertido. Se encontraron {len(pages)} páginas.")
+            flattened_data.append({
+                "libro_id": os.path.splitext(os.path.basename(pdf_path))[0],
+                "pagina": page_number,
+                "parrafo_id": j + 1,
+                "texto_original": parrafo,
+                "texto_procesado": cleaned_text
+            })
 
-# Lista para almacenar los datos de cada página
-ocr_data_por_pagina = []
+print(f"\n📦 Total de párrafos extraídos: {len(flattened_data)}")
 
-# Extraer texto usando OCR, página por página
-for i, page in enumerate(pages):
-    page_number = i + 1
-    print(f"Procesando Página {page_number}...")
+# Guardar resultado plano
+output_filename = 'datos_planos_por_parrafo.json'
+with open(output_filename, 'w', encoding='utf-8') as f:
+    json.dump(flattened_data, f, ensure_ascii=False, indent=4)
 
-    image_path = f"page_{page_number}.png"
-    page.save(image_path, 'PNG')
-
-    # Extraer texto con pytesseract
-    extracted_text = image_to_string(Image.open(image_path), lang='spa')
-    
-    # --- Aplicar el procesamiento de spaCy ---
-    spacy_analysis = process_text_with_spacy(extracted_text)
-
-    # Prepara el diccionario para la página actual
-    page_data = {
-        "page_number": page_number,
-        "processed_text": {
-            "tokens": spacy_analysis["tokens"],
-            "lemmas": spacy_analysis["lemmas"],
-            "pos_tags": spacy_analysis["pos_tags"],
-            "entities": spacy_analysis["entities"],
-            "cleaned_text_for_search": spacy_analysis["cleaned_text"] # Texto ideal para indexar en un motor de búsqueda
-        }
-    }
-    
-    ocr_data_por_pagina.append(page_data)
-    
-    os.remove(image_path) # Elimina la imagen temporal
-    print(f"Página {page_number} procesada.")
-
-# --- 2. Preparar el Diccionario Final para JSON ---
-final_json_output = {
-    "file_path": os.path.abspath(pdf_path), # Incluimos la ruta completa del archivo
-    "document_name": os.path.basename(pdf_path),
-    "pdf_metadata": pdf_metadata, # Incluye la metadata del PDF
-    "pages": ocr_data_por_pagina # La lista de datos de cada página
-}
-
-# --- 3. Guardar en un Archivo JSON ---
-output_json_filename = 'documento_ocr_spacy_data.json' # Nuevo nombre para el archivo JSON
-
-try:
-    with open(output_json_filename, 'w', encoding='utf-8') as f:
-        json.dump(final_json_output, f, ensure_ascii=False, indent=4)
-    print(f"\n¡Los datos de OCR y análisis de spaCy se han guardado exitosamente en '{output_json_filename}'!")
-except IOError as e:
-    print(f"Error al guardar el archivo JSON '{output_json_filename}': {e}")
-except Exception as e:
-    print(f"Ocurrió un error inesperado al escribir el JSON: {e}")
+print(f"\n✅ Datos por párrafo guardados en '{output_filename}'")
