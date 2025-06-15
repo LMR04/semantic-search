@@ -7,8 +7,7 @@ input_json_path = 'datos_planos_por_parrafo.json'
 output_json_path = 'embeddings_por_parrafo.json'
 
 # Modelo de embeddings
-# model = SentenceTransformer('hiiamsid/sentence_similarity_spanish_es')
-model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
+model = SentenceTransformer('multi-qa-mpnet-base-dot-v1')
 
 try:
     # Cargar datos planos
@@ -24,7 +23,7 @@ try:
         texto = item.get("texto_procesado", "").strip()
 
         if texto:
-            embedding = model.encode(texto).tolist()
+            embedding = model.encode(texto, normalize_embeddings=True).tolist()
 
             embedded_data.append({
                 "libro_id": item.get("libro_id"),

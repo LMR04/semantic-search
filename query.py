@@ -1,69 +1,51 @@
 import faiss
 import json
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, CrossEncoder
 
-# === Rutas ===
-faiss_index_path = 'faiss_parrafos.index'
-metadata_path = 'faiss_metadata.json'
+# === Cargar todo ===
+faiss_index = faiss.read_index("faiss_parrafos.index")
+with open("faiss_metadata.json", "r", encoding="utf-8") as f:
+    metadata = json.load(f)
 
-# === Cargar índice FAISS ===
-index = faiss.read_index(faiss_index_path)
+encoder = SentenceTransformer("multi-qa-mpnet-base-dot-v1")
+reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")  # rápido y preciso
 
-# === Cargar metadatos ===
-with open(metadata_path, 'r', encoding='utf-8') as f:
-    metadatos = json.load(f)
+def buscar(query, top_k=10):
+    query_emb = encoder.encode(query, normalize_embeddings=True).astype(np.float32).reshape(1, -1)
+    D, I = faiss_index.search(query_emb, top_k)
 
-# === Cargar modelo de embeddings ===
-print("🧠 Cargando modelo de SentenceTransformer...")
-# model = SentenceTransformer('hiiamsid/sentence_similarity_spanish_es') # Puedes usar el que entrenaste
-model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
+    candidatos = []
+    pares_rerank = []
 
-# === Definir búsqueda ===
-def buscar_parrafos(query, top_k=5):
-    # Obtener embedding del query
-    embedding = model.encode(query, convert_to_numpy=True).astype(np.float32)
+    for idx in I[0]:
+        meta = metadata[idx]
+        texto = meta["texto_original"]
+        candidatos.append(meta)
+        pares_rerank.append((query, texto))
 
-    # Normalizar el query (para compatibilidad con FAISS IP)
-    norm = np.linalg.norm(embedding)
-    if norm == 0:
-        print("❌ El embedding del query es nulo.")
-        return []
-    embedding /= norm
+    scores = reranker.predict(pares_rerank)
 
-    # Buscar en FAISS
-    D, I = index.search(embedding.reshape(1, -1), top_k)
+    # Rerank
+    rerank_result = sorted(zip(candidatos, scores), key=lambda x: x[1], reverse=True)
 
-    resultados = []
-    for score, idx in zip(D[0], I[0]):
-        if idx < 0 or idx >= len(metadatos):
-            continue  # Seguridad ante errores
+    return [{
+        "libro_id": r[0]["libro_id"],
+        "pagina": r[0]["pagina"],
+        "parrafo_id": r[0]["parrafo_id"],
+        "texto": r[0]["texto_original"],
+        "score": round(float(r[1]), 4)
+    } for r in rerank_result]
 
-        item = metadatos[idx]
-        resultados.append({
-            "libro_id": item["libro_id"],
-            "pagina": item["pagina"],
-            "parrafo_id": item["parrafo_id"],
-            "texto_original": item.get("texto_original", ""),
-            "similaridad": float(score)  # Producto interno (normalizado) ≈ coseno
-        })
-
-    # Ordenar por mayor similaridad (aunque ya vienen así)
-    resultados.sort(key=lambda x: x["similaridad"], reverse=True)
-
-    return resultados
-
-# === Ejecutar búsqueda ===
+# === Ejecutar ===
 if __name__ == "__main__":
-    query = input("🔎 Ingresa tu consulta: ")
+    while True:
+        query = input("🔎 Pregunta: ")
+        resultados = buscar(query)
 
-    resultados = buscar_parrafos(query, top_k=5)
-
-    if not resultados:
-        print("❌ No se encontraron resultados.")
-    else:
-        print("\n📚 Resultados más relevantes:")
-        for r in resultados:
+        print("\n📚 Párrafos más relevantes:")
+        for r in resultados[:5]:
             print(f"\n➡️ Libro: {r['libro_id']}, Página: {r['pagina']}, Párrafo: {r['parrafo_id']}")
-            print(f"🔗 Similaridad: {r['similaridad']:.4f}")
-            print(f"📝 Texto: {r['texto_original']}")
+            print(f"⭐️ Score: {r['score']}")
+            print(f"📝 {r['texto']}")
+
