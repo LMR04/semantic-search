@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pdf2image
+pytesseract
+spacy
+sentence-transformers
+faiss-cpu
+scikit-learn
+python-multipart
+python-dotenv
+
+# To install the required packages, run the following commands:
+# pip install -r requirements.txt
+# python -m spacy download es_core_news_sm

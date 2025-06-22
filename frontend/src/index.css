@@ -1,0 +1,86 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 345 47% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 345 47% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 345 47% 15%;
+
+    --primary: 345 47% 22%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 345 20% 96%;
+    --secondary-foreground: 345 47% 15%;
+
+    --muted: 345 10% 96%;
+    --muted-foreground: 345 16% 46%;
+
+    --accent: 345 30% 94%;
+    --accent-foreground: 345 47% 22%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 345 15% 91%;
+    --input: 345 15% 91%;
+    --ring: 345 47% 22%;
+
+    --radius: 0.5rem;
+
+    /* Custom wine colors for the search engine */
+    --wine-deep: 345 47% 22%;
+    --wine-medium: 345 35% 35%;
+    --wine-light: 345 25% 65%;
+    --wine-pale: 345 15% 85%;
+  }
+
+  .dark {
+    --background: 345 47% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 345 47% 4%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 345 47% 4%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 345 47% 15%;
+
+    --secondary: 345 32% 17%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 345 32% 17%;
+    --muted-foreground: 345 20% 65%;
+
+    --accent: 345 32% 17%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 345 32% 17%;
+    --input: 345 32% 17%;
+    --ring: 345 25% 84%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
