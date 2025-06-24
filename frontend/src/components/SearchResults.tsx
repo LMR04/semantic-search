@@ -163,6 +163,9 @@ const SearchResults = ({ results, query, isLoading }: SearchResultsProps) => {
                     <File className="w-3 h-3" />
                     <span>{doc.size}</span>
                   </div>
+                  <div className="flex items-center space-x-1">
+                    <span>Score: 0.98</span>
+                  </div>
                 </div>
               </div>
             </Card>

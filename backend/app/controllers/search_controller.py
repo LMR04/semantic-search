@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query
 from app.services import search_service
-from app.models import SearchRequest, SearchResponse
+from app.models import SearchResponse
 
 router = APIRouter()
 
