@@ -111,7 +111,7 @@ const SearchResults = ({ results, query, isLoading }: SearchResultsProps) => {
         ) : (
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              Mostrando {results.length} documentos disponibles
+              Mostrando {results.length} documentos de la búsqueda
             </p>
           </div>
         )}
