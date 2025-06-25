@@ -1,8 +1,10 @@
 from pydantic import BaseModel
 
 class SearchResponse(BaseModel):
-    book_id: str
-    page: int
-    paragraph_id: int 
-    original_text: str
-    similarity_score: float
+    title: str
+    text_result: str
+    doc_type: str
+    date: str
+    weight: float
+    score: float
+    url: str

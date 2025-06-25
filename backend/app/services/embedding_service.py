@@ -23,7 +23,10 @@ def generate_embeddings(input_json_path: str, output_json_path: str = None) -> s
                     "page": item.get("page"),
                     "paragraph_id": item.get("paragraph_id"),
                     "embedding": embedding,
-                    "original_text": item.get("original_text", "")
+                    "original_text": item.get("original_text", ""),
+                    "format": item.get("format", ""),
+                    "file_size_mb": item.get("file_size_mb", 0),
+                    "modified_date": item.get("modified_date", "")
                 })
 
         os.makedirs(os.path.dirname(output_json_path), exist_ok=True)

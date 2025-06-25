@@ -7,6 +7,7 @@ import json
 import PyPDF2
 import pytesseract
 import uuid
+from datetime import datetime
 
 # Tesseract y Poppler Configuration
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -32,12 +33,20 @@ def extract_text_from_pdf(pdf_path, output_dir: str = "data/"):
         raise FileNotFoundError(f"PDF file not found: {pdf_path}")  
     
     book_id = os.path.splitext(os.path.basename(pdf_path))[0]
+    file_size_mb = round(os.path.getsize(pdf_path) / (1024 * 1024), 2)
+    file_format = os.path.splitext(pdf_path)[1][1:].upper()
+
+    try:
+        modified_timestamp = os.path.getmtime(pdf_path)
+        modified_date = datetime.fromtimestamp(modified_timestamp).strftime("%d de %B, %Y")
+    except Exception:
+        modified_date = "Unknown date"
+    
     results = []
 
     try:
         with open(pdf_path, 'rb') as file:
             reader = PyPDF2.PdfReader(file)
-            total_pages = len(reader.pages)
     except Exception as e: 
         raise RuntimeError(f"Error reading PDF file: {e}")
     
@@ -63,7 +72,10 @@ def extract_text_from_pdf(pdf_path, output_dir: str = "data/"):
                 "page": page_number,
                 "paragraph_id": j + 1,
                 "original_text": paragraphs,
-                "processed_text": cleaned_text
+                "processed_text": cleaned_text,
+                "format": file_format,
+                "file_size_mb": file_size_mb,   
+                "modified_date": modified_date
             })
         
         os.makedirs(output_dir, exist_ok=True)

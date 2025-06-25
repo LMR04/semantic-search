@@ -24,7 +24,10 @@ def index_embeddings(embedding_json_path: str, output_name: str = "faiss_paragra
             "book_id": item["book_id"],
             "page": item["page"],
             "paragraph_id": item["paragraph_id"],
-            "original_text": item["original_text"]
+            "original_text": item["original_text"],
+            "format": item.get("format", ""),
+            "file_size_mb": item.get("file_size_mb", 0), 
+            "modified_date": item.get("modified_date", "")
         })
 
     vectors_np = np.vstack(vectors)
