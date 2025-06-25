@@ -21,12 +21,12 @@ const SearchHeader = ({ onUploadClick }: SearchHeaderProps) => {
             </div>
           </div>
           
-          <Button 
+          {/* <Button 
             onClick={onUploadClick}
             className="bg-primary hover:bg-wine-medium transition-colors duration-200"
           >
             Cargar Documentos
-          </Button>
+          </Button> */}
         </div>
       </div>
     </header>

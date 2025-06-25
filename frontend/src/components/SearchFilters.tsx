@@ -11,6 +11,7 @@ interface SearchFiltersProps {
     dateRange: { from: string; to: string };
   };
   onFiltersChange: (filters: any) => void;
+  onApply: () => void;
 }
 
 const SearchFilters = ({ filters, onFiltersChange }: SearchFiltersProps) => {
