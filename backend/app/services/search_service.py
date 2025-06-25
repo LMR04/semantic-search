@@ -3,12 +3,13 @@ import faiss
 import json
 import numpy as np
 from sentence_transformers import SentenceTransformer, CrossEncoder
+from scipy.special import expit 
 
 encoder = SentenceTransformer("multi-qa-mpnet-base-dot-v1")
 reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
-INDEX_PATH = "faiss_paragraphs.index"
-METADATA_PATH = "faiss_metadata.json"
+INDEX_PATH = r"C:\Users\ruzul\Desktop\semantic-search\backend\data\index\faiss_paragraphs.index"
+METADATA_PATH = r"C:\Users\ruzul\Desktop\semantic-search\backend\data\metadata\embeddings_paragraph.json"
 
 if os.path.exists(INDEX_PATH):
     faiss_index = faiss.read_index(INDEX_PATH)  
@@ -21,7 +22,7 @@ if os.path.exists(METADATA_PATH):
 else:
     raise FileNotFoundError(f"Metadata file not found at {METADATA_PATH}")
 
-def search(query: str, top_k: int = 10) -> list[dict]:
+def search(query: str, top_k: int = 3) -> list[dict]:
     query_emb = encoder.encode(query, normalize_embeddings=True).astype(np.float32).reshape(1, -1)
     D, I = faiss_index.search(query_emb, top_k)
 
@@ -35,20 +36,23 @@ def search(query: str, top_k: int = 10) -> list[dict]:
         rerank_pairs.append((query, text))
 
     scores = reranker.predict(rerank_pairs)
+    scores = expit(scores)
 
     rerank_result = sorted(zip(candidates, scores), key=lambda x: x[1], reverse=True)
 
     results = [{
-        "book_id": r[0]["book_id"],
-        "page": r[0]["page"],
-        "paragraph_id": r[0]["paragraph_id"],
-        "text": r[0]["original_text"],
-        "score": round(float(r[1]), 4)
+        "title": r[0]["book_id"],
+        # "page": r[0]["page"],
+        # "paragraph_id": r[0]["paragraph_id"],
+        "text_result": r[0]["original_text"],
+        "doc_type": r[0]["format"],
+        'date': r[0]["modified_date"],
+        "weight": r[0]["file_size_mb"],
+        "score": round(float(r[1]), 4),
+        "url": r[0].get("url", "")
     } for r in rerank_result]
 
     return results
-
-
 
 
 # import faiss

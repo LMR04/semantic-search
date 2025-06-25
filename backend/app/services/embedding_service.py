@@ -26,7 +26,8 @@ def generate_embeddings(input_json_path: str, output_json_path: str = None) -> s
                     "original_text": item.get("original_text", ""),
                     "format": item.get("format", ""),
                     "file_size_mb": item.get("file_size_mb", 0),
-                    "modified_date": item.get("modified_date", "")
+                    "modified_date": item.get("modified_date", ""),
+                    "url": item.get("url", "")
                 })
 
         os.makedirs(os.path.dirname(output_json_path), exist_ok=True)
@@ -41,6 +42,16 @@ def generate_embeddings(input_json_path: str, output_json_path: str = None) -> s
         raise json.JSONDecodeError("Error decoding JSON file. Check its format.")
     except Exception as e:
         raise Exception(f"Unexpected error: {e}")
+    
+if __name__ == "__main__":
+    input_json_path = r"C:\Users\ruzul\Desktop\semantic-search\backend\data\metadata\linus_processed.json"
+    output_json_path = r"C:\Users\ruzul\Desktop\semantic-search\backend\data\metadata\embeddings_paragraph.json"
+
+    try:
+        result_path = generate_embeddings(input_json_path, output_json_path)
+        print(f"✅ Embeddings saved successfully to '{result_path}'")
+    except Exception as e:
+        print(f"❌ Error: {e}")
 
 # import json
 # from sentence_transformers import SentenceTransformer

@@ -1,0 +1,167 @@
+[
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 1,
+    "original_text": "Tómas para [eautrción,",
+    "processed_text": "tóma eautrción",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 2,
+    "original_text": "| revista digital para profesionales de la enseñanza",
+    "processed_text": "| revista digital profesional enseñanza",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 3,
+    "original_text": "INS 5. Noviembre 2009 [Federación de Enseñanza de CC.OO. de Andalucía ISSN: 1989-4023 | Dep.Leg.: GR E",
+    "processed_text": "ins noviembre federación enseñanza cc.oo andalucía issn 1989-4023 | dep.leg gr",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 4,
+    "original_text": "Personajes de la Informática: Linus Torvalds",
+    "processed_text": "personaje informática linu torvalds",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 5,
+    "original_text": "ORÍGENES Y TRAYECTORIA ACADÉMICA",
+    "processed_text": "origen trayectoria académico",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 6,
+    "original_text": "Linus Torvalds nació el 28 de diciembre de 1969 en la\ncapital de Finlandia, Helsinki, y pertenece a la comunidad de\nhabla sueca de su país (el sueco es lengua cooficial en Finlandia\ny entorno al 6% de la población lo tienen como lengua materna).\nSu nombre es un pequeño honor que hicieron sus padres a Linus\nPauling, premio Nobel de Química.",
+    "processed_text": "linu torvald nacer diciembre capital finlandia helsinki pertenecer comunidad sueco país sueco lengua cooficial finlandia entorno 6% población lengua materno nombre pequeño honor padre linu pauling premio nobel química",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 7,
+    "original_text": "Sus primeros pasos en la informática los dio cuando su\nabuelo que era matemático y estadístico de una universidad le\ncompró un Commodore en 1980 y le ayudó a aprender a usarlo.\nEsto despertó en Linus su interés por la computación.",
+    "processed_text": "paso informática abuelo matemático estadístico universidad comprar commodore ayudar aprender usar él despertar linu interés computación",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 8,
+    "original_text": "LINUS TORVALDS",
+    "processed_text": "linu torvalds",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 9,
+    "original_text": "En 1988 Linus Torvalds es admitido en la Universidad de Helsinki. Durante\neste periodo conoció un sistema operativo con fines académicos llamado Minix, el cual\nera un clon de Unix de código abierto.",
+    "processed_text": "linu torvalds admitir universidad helsinki periodo conocer sistema operativo fin académico llamado minix clon unix código abierto",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 10,
+    "original_text": "En 1991 se compraría un PC con un procesador 80386 de Intel de 33MHz y 4\nMb de RAM, con este ordenador programaría el primer Linux.",
+    "processed_text": "comprar pc procesador intel 33mhz mb ram ordenador programar linux",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 11,
+    "original_text": "Terminó sus estudios superiores en 1997 después de diez años como\nestudiante e investigador en la Universidad de Helsinki graduándose con el grado de\nMaestría de Ciencias de la Computación.",
+    "processed_text": "terminar estudio superior año estudiante investigador universidad helsinki graduar él grado maestría ciencia computación",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 12,
+    "original_text": "CÓMO NACIÓ LINUX",
+    "processed_text": "nacer linux",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 13,
+    "original_text": "En la universidad aprendió el lenguaje de programación C, que era el\nlenguaje en el que está programado Minix y viendo que este sistema le era\ndesagradable decidió tomar parte de sus ideas prestadas y empezar a construir su\npropio sistema operativo con el fin de conocer mejor el funcionamiento de su Intel\n80386 y para luego sustituir a Minix. Este sería la primera piedra de una las mayores\nrevoluciones de la informática en la década de los 90.",
+    "processed_text": "universidad aprender lenguaje programación c lenguaje programado minix  ver sistema desagradable decidir tomar idea prestado empezar construir sistema operativo funcionamiento intel sustituir minix piedra mayor revolución informática década",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 14,
+    "original_text": "Al principio y después de un duro trabajo consiguió crear un programa que\nmostraban “AAAABBBB” que eran el resultado de ejecutar dos procesos. Uno de ellos\nleería desde un MODEM e imprimiría los resultados en pantalla y el otro recibiría los\ndatos enviados desde teclado y escribiría en el MODEM. Este programa llegó a ser\nbastante utilizado por Linus siendo arrancado a través de un disquete.",
+    "processed_text": "principio duro trabajo conseguir crear programa mostrar aaaabbbb resultado ejecutar proceso leer modem imprimir resultado pantalla recibir dato enviado teclado escribiría modem programa utilizado linu arrancar disquete",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  },
+  {
+    "book_id": "linus",
+    "page": 1,
+    "paragraph_id": 15,
+    "original_text": "Después le surgió la necesidad de subir y descargar archivos de su\nuniversidad, con lo que se puso de nuevo manos a la obra para poder agregar a su",
+    "processed_text": "surgir necesidad subir descargar archivo universidad poner mano obra agregar",
+    "format": "PDF",
+    "file_size_mb": 0.09,
+    "modified_date": "13 de June, 2025",
+    "url": "C:\\Users\\ruzul\\Desktop\\semantic-search\\backend\\data\\books\\linus.pdf"
+  }
+]

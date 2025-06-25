@@ -3,10 +3,15 @@ import json
 import numpy as np
 import os
 from tqdm import tqdm
+from pathlib import Path
 
-def index_embeddings(embedding_json_path: str, output_name: str = "faiss_paragraphs"):
-    output_dir = "data/index"
-    metadata_dir = "data/metadata"
+BASE_DIR = Path(__file__).resolve().parents[2]
+base = BASE_DIR / "data"
+base.mkdir(parents=True, exist_ok=True)
+
+def index_embeddings(embedding_json_path: str, output_name: str):
+    output_dir = os.path.join(base, "index") 
+    metadata_dir = os.path.join(base, "metadata")
     os.makedirs(output_dir, exist_ok=True)
     os.makedirs(metadata_dir, exist_ok=True)
 
@@ -27,7 +32,8 @@ def index_embeddings(embedding_json_path: str, output_name: str = "faiss_paragra
             "original_text": item["original_text"],
             "format": item.get("format", ""),
             "file_size_mb": item.get("file_size_mb", 0), 
-            "modified_date": item.get("modified_date", "")
+            "modified_date": item.get("modified_date", ""),
+            "url": item.get("url", "")
         })
 
     vectors_np = np.vstack(vectors)
@@ -41,6 +47,16 @@ def index_embeddings(embedding_json_path: str, output_name: str = "faiss_paragra
     faiss.write_index(index, index_path)
     with open(metadata_path, "w", encoding="utf-8") as f:
         json.dump(metadata, f, ensure_ascii=False, indent=2)
+
+if __name__ == "__main__":
+    embedding_json_path = r"C:\Users\ruzul\Desktop\semantic-search\backend\data\metadata\embeddings_paragraph.json"
+    output_name = "faiss_paragraphs"
+
+    try:
+        index_embeddings(embedding_json_path, output_name)
+        print(f"✅ Indexing completed. Index saved to: {output_name}.index")
+    except Exception as e:
+        print(f"❌ Error during indexing: {e}")
 
 
 

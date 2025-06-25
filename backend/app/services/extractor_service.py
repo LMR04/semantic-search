@@ -8,6 +8,13 @@ import PyPDF2
 import pytesseract
 import uuid
 from datetime import datetime
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+metadata_dir = BASE_DIR / "data" / "metadata"
+metadata_dir.mkdir(parents=True, exist_ok=True)
+
+pdf_path = r'C:\Users\ruzul\Desktop\semantic-search\backend\data\books\linus.pdf'
 
 # Tesseract y Poppler Configuration
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -28,7 +35,7 @@ def process_text_with_spacy(text):
         if not token.is_stop and not token.is_punct and not token.is_space and not token.like_num
     ])
 
-def extract_text_from_pdf(pdf_path, output_dir: str = "data/"):
+def extract_text_from_pdf(pdf_path, output_dir=metadata_dir):
     if not os.path.exists(pdf_path):
         raise FileNotFoundError(f"PDF file not found: {pdf_path}")  
     
@@ -75,7 +82,8 @@ def extract_text_from_pdf(pdf_path, output_dir: str = "data/"):
                 "processed_text": cleaned_text,
                 "format": file_format,
                 "file_size_mb": file_size_mb,   
-                "modified_date": modified_date
+                "modified_date": modified_date,
+                "url": pdf_path
             })
         
         os.makedirs(output_dir, exist_ok=True)
@@ -83,7 +91,16 @@ def extract_text_from_pdf(pdf_path, output_dir: str = "data/"):
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
 
+        print(output_path)
+
         return output_path
+
+if __name__ == "__main__":
+    try:
+        output_file = extract_text_from_pdf(pdf_path)
+        print(f"✅ Text extraction completed. Output saved to: {output_file}")
+    except Exception as e:
+        print(f"❌ Error during text extraction: {e}")
 
 # # Carga modelo spaCy
 # try:
